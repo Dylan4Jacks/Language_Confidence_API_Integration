@@ -1,50 +1,10 @@
 from fastapi import FastAPI
-from requests.auth import HTTPBasicAuth
-import requests
-import json
-
-url = "https://api.languageconfidence.ai/pronunciation-trial-V2/score"
-
-#open text file in read mode
-audio_data_txt = open("temp_data.txt", "r")
- 
-#read whole file to a string
-audio_data = audio_data_txt.read()
- 
-#close file
-audio_data_txt.close()
-
-payload = json.dumps({
-  "format": "wav",
-  "content": "I really like green apples",
-  "audioBase64": audio_data
-})
-headers = {
-  'Content-Type': 'application/json',
-  'x-api-key': 'gr6UIed5a6O0Ldj1d6sR9Jmq3j6kR2e4GN2ozK5d'
-}
-
-response = requests.request("POST", url, headers=headers, data=payload)
-
-
-response_json_unprocessed = json.loads(response.text)
-
-scores = []
-for word in response_json_unprocessed["word_list"]:
-	scores.append(word['mean'])
-response_json = {
-					'scores' : scores,
-					'av_score' : response_json_unprocessed['sentence_mean'],
-
-				}
-
 
 app = FastAPI()
 
-@app.get("/")
-async def root():
-    return response_json
+#domain where this api is hosted for example : localhost:5000/docs to see swagger documentation automagically generated.
 
-@app.get("/items/{item_id}")
-async def read_item(item_id):
-    return {"item_id": item_id}
+
+@app.get("/")
+def home():
+    return {"message":"Hello TutLinks.com"}
