@@ -1,10 +1,12 @@
 import requests
 import json
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Response
 from requests.auth import HTTPBasicAuth
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from fastapi.responses import RedirectResponse
+from pydantic import BaseModel
 
 app = FastAPI()
 
@@ -45,7 +47,7 @@ response_json = {
 
 @app.get("/")
 async def root():
-    return response_json
+    return RedirectResponse(url="/index")
 
 
 @app.get("/index", response_class=HTMLResponse)
@@ -56,3 +58,15 @@ async def write_index(request: Request):
 async def write_home(request: Request, id: int):
     return templates.TemplateResponse("home.html", {"request": request, "id": id })
 
+@app.get("/make_post")
+async def make_request():
+  response = requests.request("POST", url, headers=headers, data=payload)
+  response_json_unprocessed = json.loads(response.text)
+  scores = []
+  for word in response_json_unprocessed["word_list"]:
+	  scores.append(word['mean'])
+  response_json = {
+		'scores' : scores,
+		'av_score' : response_json_unprocessed['sentence_mean'],
+		}
+  return RedirectResponse(url="/index")

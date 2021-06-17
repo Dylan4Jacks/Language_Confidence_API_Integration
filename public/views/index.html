@@ -14,7 +14,7 @@
 		</system.web>
 		</location>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<link rel="stylesheet" type="text/css" href="{{ url_for('public', path='/styles.css') }}" />
+	<link rel="stylesheet" type="text/css" href="{{ url_for('public', path='/styles.css?version=1') }}" />
 	<title>Learning Confidence API Integration</title>
 </head>
 
@@ -44,11 +44,17 @@
 					<img src="{{ url_for('public', path='/images/nav-logo.png') }}" alt="page-logo">
 				</div>
 				<div class="title-text">Language Confidence</div>
-				<div class="listen-button">LISTEN BUTTON PLACEHOLDER</div>
+				<form action="/make_post" method="get" class="post-form">
+					<button type="submit" name="Listen" value="Send Request" class="listen-button">
+						Send Request
+					</button>
+				</form>
 			</div>
 		</div>
 		<div class="footer"></div>
 	</div>
 </body>
-
+<script>
+	
+</script>
 </html>
