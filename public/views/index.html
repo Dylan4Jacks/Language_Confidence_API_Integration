@@ -12,10 +12,63 @@
 				<allow users ="*" />
 			</authorization>
 		</system.web>
-		</location>
+	</location>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<link rel="stylesheet" type="text/css" href="{{ url_for('public', path='/styles.css?version=1') }}" />
 	<title>Learning Confidence API Integration</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script>
+		$(document).ready(function(){
+		$("#request_btn").click(function(){
+			var objectData = {
+             input_text: $("#input_text").val(),
+             audio: "1"               
+         	};
+			var objectDataString = JSON.stringify(objectData);
+			$.ajax({
+            	type: "POST",
+            	url: "/make_post", //getUrl.protocol + "//" + getUrl.host
+            	dataType: "json",
+            	data: objectDataString,
+            	success: function (data, status) {
+					$("#test").html(JSON.stringify(data));
+					console.log(data)
+               		alert(status);
+            	},
+            	error: function (data, status) {
+             		alert(status);
+            	}
+        	});
+		});
+		});
+	</script>
+	<script>
+		$(document).ready(function(){
+		$("#sample_request_btn").click(function(){
+			$.get("{{ url_for('public', path='/models/test_audio.txt') }}", function(audiodata) {
+				var objectData = {
+             		input_text: "I really like green apples",
+             		audio: audiodata               
+         		};
+				var objectDataString = JSON.stringify(objectData);
+				$.ajax({
+            		type: "POST",
+            		url: "/make_post", //getUrl.protocol + "//" + getUrl.host
+            		dataType: "json",
+            		data: objectDataString,
+            		success: function (data, status) {
+						$("#test").html(JSON.stringify(data));
+						console.log(data)
+               			alert(status);
+            		},
+            		error: function (data, status) {
+             			alert(status);
+            		}
+        		});
+			}, 'text')
+		});
+		});
+	</script>
 </head>
 
 <body>
@@ -43,18 +96,13 @@
 				<div class="audio-symbol">
 					<img src="{{ url_for('public', path='/images/nav-logo.png') }}" alt="page-logo">
 				</div>
-				<div class="title-text">Language Confidence</div>
-				<form action="/make_post" method="get" class="post-form">
-					<button type="submit" name="Listen" value="Send Request" class="listen-button">
-						Send Request
-					</button>
-				</form>
+				<div class="title-text" id="test">Language Confidence</div>
+				<input type="text" name="input_text" id="input_text" placeholder="passage to be read...">
+				<button name="Listen" class="listen-button" id="request_btn" onclick="">Send Request</button>
+				<button name="Listen" class="listen-button" id="sample_request_btn" onclick="">Send Sample Data</button>
 			</div>
 		</div>
 		<div class="footer"></div>
 	</div>
 </body>
-<script>
-	
-</script>
 </html>
