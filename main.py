@@ -54,8 +54,10 @@ async def make_request(audiodata: AudioData):
   response = requests.request("POST", url, headers=headers, data=payload)
 
   response_json_unprocessed = json.loads(response.text)
-
+  print(response_json_unprocessed)
   scores = []
+  if "error" in response_json_unprocessed:
+      return
   for word in response_json_unprocessed["word_list"]:
 	  scores.append(word['mean'])
   response_json = {
